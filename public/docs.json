@@ -1,13 +1,11 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Tạo Ảnh Đẹp API",
+    "title": "taoanhdep",
+    "description": "**an api for creating anime avatars**",
     "contact": {
-      "email": "kaysilminer@gmail.com"
-    },
-    "license": {
-      "name": "MIT",
-      "url": "https://opensource.org/licenses/MIT"
+      "name": "kaysil",
+      "url": "https://github.com/Kaysil"
     },
     "version": "1.0.0"
   },
@@ -19,33 +17,35 @@
   "tags": [
     {
       "name": "wibu",
-      "description": "Tạo avatar chữ ký phong cách anime"
+      "description": "creating avatar with anime style"
     }
   ],
   "paths": {
     "/v1/wibu/create": {
       "get": {
-        "tags": ["wibu"],
-        "summary": "Tạo ảnh",
+        "tags": [
+          "wibu"
+        ],
+        "summary": "creating image",
         "operationId": "wibuCreate",
         "parameters": [
           {
             "name": "id_nhanvat",
             "in": "query",
-            "description": "ID của nhân vật",
+            "description": "the character id get from the list",
             "required": true,
             "style": "form",
             "explode": true,
             "schema": {
-              "type": "number",
+              "maximum": 1090,
               "minimum": 0,
-              "maximum": 450
+              "type": "number"
             }
           },
           {
             "name": "chu_ky",
             "in": "query",
-            "description": "Chữ ký ở đầu ảnh",
+            "description": "the signature (above the character image)",
             "required": true,
             "style": "form",
             "explode": false,
@@ -56,7 +56,7 @@
           {
             "name": "chu_nen",
             "in": "query",
-            "description": "Chữ nền đằng sau nhân vật anime",
+            "description": "the background text (behind the character)",
             "required": true,
             "style": "form",
             "explode": true,
@@ -67,7 +67,7 @@
           {
             "name": "mau_nen",
             "in": "query",
-            "description": "màu nền (tên hoặc mã hex)",
+            "description": "background color (can be text [pink, yellow] or hex codes), leave it blank for using character default color",
             "required": false,
             "style": "form",
             "explode": true,
@@ -79,28 +79,30 @@
         ],
         "responses": {
           "200": {
-            "description": "Trả về ảnh khi tạo thành công",
+            "description": "retrun a image if successful",
             "content": {
               "image/png": {}
             }
           },
           "400": {
-            "description": "Nhập sai/thiếu query parameters"
+            "description": "missing query parameters"
           },
           "500": {
-            "description": "Lỗi máy chủ"
+            "description": "internal server error"
           }
         }
       }
     },
     "/v1/wibu/list": {
       "get": {
-        "tags": ["wibu"],
-        "summary": "Lấy danh sách nhân vật",
+        "tags": [
+          "wibu"
+        ],
+        "summary": "get the character list",
         "operationId": "wibuList",
         "responses": {
           "200": {
-            "description": "Lấy danh sách thành công",
+            "description": "successful",
             "content": {
               "application/json": {
                 "schema": {
@@ -113,7 +115,7 @@
             }
           },
           "500": {
-            "description": "Lỗi máy chủ"
+            "description": "internal server error"
           }
         }
       }
@@ -122,7 +124,12 @@
   "components": {
     "schemas": {
       "WibuListResponse": {
-        "required": ["id", "manufacturer", "name", "releaseDate"],
+        "required": [
+          "id",
+          "manufacturer",
+          "name",
+          "releaseDate"
+        ],
         "type": "object",
         "properties": {
           "status": {
@@ -133,7 +140,7 @@
           "message": {
             "type": "string",
             "format": "string",
-            "example": "Successful"
+            "example": "successful"
           },
           "data": {
             "type": "array",
@@ -145,21 +152,52 @@
         }
       },
       "WibuListData": {
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "type": "object",
         "properties": {
-          "characterId": {
+          "_id": {
             "type": "number",
             "example": 0
           },
-          "characterName": {
+          "name": {
             "type": "string",
-            "example": "hy tomboy"
+            "example": "boy"
           },
-          "imageUrl": {
+          "dupe_name": {
+            "type": "string",
+            "example": "boy-1"
+          },
+          "image_url": {
             "type": "string",
             "format": "url",
-            "example": "https://kaysil.dev/hy-tomboy.png"
+            "example": "https://raw.githubusercontent.com/Kaysil/tad-assets/main/anime-avatar/high/boy-1.png"
+          },
+          "image_original_url": {
+            "type": "string",
+            "format": "url",
+            "example": "https://lh3.googleusercontent.com/-BrCbdZUqVi0/YbFvE6sIPvI/AAAAAAAA2CQ/145Yk71SYAUk2LpVME6ZvA2DRb_9YQ2egCNcBGAsYHQ/h240/boy.png"
+          },
+          "primary_color": {
+            "type": "string",
+            "format": "hex",
+            "example": "#9fc177"
+          },
+          "category": {
+            "type": "string",
+            "format": "string",
+            "example": "boy"
+          },
+          "margin_left": {
+            "type": "number",
+            "format": "number",
+            "example": 0
+          },
+          "mask_height": {
+            "type": "number",
+            "format": "number",
+            "example": 0
           }
         }
       }
